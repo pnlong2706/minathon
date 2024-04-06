@@ -4,10 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Info Page</title>
+
     <script>
-        user_name = "hihiaass";
+        let user_name = "";
+        let user_mail = "";
+        let user_dob = "";
+        let user_char = "";
+        let user_hobb = "";
+        let user_addinf = "";
+
+        let current_user_id = "";
+        let current_hp = "";
+
+        function change() {
+            document.getElementById("dob").value = "2004-06-05"
+        }
+
+        function back_home() {
+            location.assign("http://192.168.211.250:3000/user?id="+current_user_id+"?hp="+current_hp);
+        }
+
+        function go_filter() {
+            location.assign("http://192.168.211.250:3000/filter?id="+current_user_id);
+        }
+
+        function go_chat_box() {
+            if(current_user_id == "-1") {
+                show_login();
+            }
+            else location.assign("http://192.168.211.250:3000/chatbox?id="+current_user_id);
+        }
 
     </script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -64,7 +93,7 @@
         }
 
         #menu {
-            padding-top: 5px;
+            padding-top: 10px;
             padding-bottom: 5px;
             position: relative;
             padding-left: 40px;
@@ -72,7 +101,6 @@
         }
 
         #menu, #menu a {
-            display: fixed;
             background-color: #003C43;
             color: white;
             font-size: 18px;
@@ -98,14 +126,16 @@
         #login_button {
             float: right;
         }
+
+
     </style>
 </head>
 <body>
     <div id = "menu">
-        <a> MATCHING  </a>
-        <a> CHAT BOX </a>
+        <a  onclick = "back_home()"> HOME </a>
+        <a onclick = "go_filter()" > MATCHING  </a>
+        <a onclick="go_chat_box()" > CHAT BOX </a>
         <a> MENTOR </a>
-        <a id = "login_button" > LOGIN </a>    
     </div>
 
     <div class="container">
@@ -129,46 +159,8 @@
             <label for="additional_info">Additional Information:</label>
             <textarea id="additional_info" name="additional_info" rows="4"></textarea>
             
-            <input type="submit" value="Submit">
+            <input type="submit" value="change" onclick="change()">
         </form>
     </div>
-
-    <script>
-        // Check if user data exists in local storage
-        const userData = JSON.parse(localStorage.getItem('userData'));
-
-        // If user data exists, fill the form fields with the saved data
-        if (userData) {
-            document.getElementById('name').value = userData.name;
-            document.getElementById('email').value = userData.email;
-            document.getElementById('dob').value = userData.dob;
-            document.getElementById('characteristics').value = userData.characteristics;
-            document.getElementById('hobbies').value = userData.hobbies;
-            document.getElementById('additional_info').value = userData.additional_info;
-        }
-
-        // Add submit event listener to the form
-        document.getElementById('userForm').addEventListener('submit', function(event) {
-            // Prevent the form from submitting normally
-            event.preventDefault();
-
-            // Get form data
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                dob: document.getElementById('dob').value,
-                characteristics: document.getElementById('characteristics').value,
-                hobbies: document.getElementById('hobbies').value,
-                additional_info: document.getElementById('additional_info').value
-            };
-
-            // Save form data to local storage
-            localStorage.setItem('userData', JSON.stringify(formData));
-
-            // Optionally, you can redirect the user to another page after saving the data
-            // window.location.href = 'anotherpage.html';
-        });
-    </script>
 </body>
 </html>
-
