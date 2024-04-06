@@ -1,0 +1,498 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    let current_user_id = "";
+    let current_hp = "";
+  </script>
+  <style>
+    * {
+      margin: 0px;
+      padding: 0px;
+    }
+
+    #menu {
+      padding-top: 10px;
+      padding-bottom: 5px;
+      position: relative;
+      padding-left: 40px;
+      height: fit-content;
+      display: fixed;
+    }
+
+    #menu,
+    #menu a {
+      background-color: #003C43;
+      color: white;
+      font-size: 18px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #menu a {
+      display: inline-block;
+      height: 50px;
+      line-height: 50px;
+      padding-left: 30px;
+      padding-right: 30px;
+      border-radius: 15px;
+    }
+
+    #menu a:hover {
+      cursor: pointer;
+      background-color: #E3FEF7;
+      color: #003C43;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    #login_button {
+      float: right;
+    }
+
+    #main_page {
+      min-height: 100vh;
+      height: auto;
+      width: 100vw;
+      display: flex;
+      flex-direction: row;
+    }
+
+    #main_page>#filter {
+      min-height: 100vh;
+      height: auto;
+      width: 25%;
+      background-color: #ffffff;
+      flex-grow: 1;
+    }
+
+    #main_page>#result {
+      min-height: 100vh;
+      height: auto;
+      width: 75%;
+      background-color: #ffffff;
+      flex-grow: 1;
+    }
+
+    .formbold-form-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+    
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .formbold-form-wrapper {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+
+  </style>
+</head>
+
+<script>
+  function back_home() {
+    location.assign("http://192.168.211.250:3000/user?id="+current_user_id+"?hp="+current_hp);
+  }
+
+  function go_chat_box() {
+    if(current_user_id == "-1") {
+        show_login();
+    }
+    else location.assign("http://192.168.211.250:3000/chatbox?id="+current_user_id);
+}
+
+function go_mentor() {
+  if(current_user_id == "-1") {
+      show_login();
+  }
+  else location.assign("http://192.168.211.250:3000/mentor?id="+current_user_id);
+}
+</script>
+
+<body style = "overflow: hidden;" >
+  <div class="container" style = "overflow: hidden;" >
+    <div id="menu">
+      <a  onclick = "back_home()" > HOME </a>
+      <a> MATCHING </a>
+      <a onclick="go_chat_box()" > CHAT BOX </a>
+      <a onclick="go_mentor()" > MENTOR </a>
+    </div>
+
+    <div id="main_page">
+      <div id="filter"  >
+        <div class="formbold-main-wrapper">
+          <!-- Author: FormBold Team -->
+          <!-- Learn More: https://formbold.com -->
+          <div class="formbold-form-wrapper" style = "position: relative; height: 80vh; overflow-y: scroll; top: 0px; border-radius: 20px; box-shadow: rgba(22, 69, 102, 0.493) 0px 5px 10px;"  >
+            <form>
+              <div class="formbold-input-group">
+                <label for="location" class="formbold-form-label"> Location </label>
+                <input type="text" name="location" id="location" placeholder="Enter location"
+                  class="formbold-form-input" />
+              </div>
+
+              <div class="formbold-input-group">
+                <label for="language" class="formbold-form-label"> Language </label>
+                <input type="text" name="language" id="language" placeholder="Enter language"
+                  class="formbold-form-input" />
+              </div>
+
+              <div class="formbold-input-group">
+                <label for="personality" class="formbold-form-label"> Personality </label>
+                <input type="text" name="personality" id="personality" placeholder="Enter personality"
+                  class="formbold-form-input" />
+              </div>
+
+              <div class="formbold-input-group">
+                <label class="formbold-form-label">
+                  Role
+                </label>
+
+                <select class="formbold-form-select" name="major" id="major">
+                  <option value="front-end">Front-end Developer</option>
+                  <option value="back-end">Back-end Developer</option>
+                  <option value="fullstack">Full Stack Developer</option>
+                  <option value="ai-data">AI and Data Scientist</option>
+                  <option value="android">Android Developer</option>
+                  <option value="ios">IOS Developer</option>
+                  <option value="devops">DevOps</option>
+                  <option value="game">Game Developer</option>
+                  <option value="cyber">Cyber Security</option>
+                </select>
+              </div>
+
+              <div class="formbold-input-group">
+                <label class="formbold-form-label">
+                  Programming language (hold ctrl to select multiple items)
+                </label>
+
+                <select class="formbold-form-select" name="programming-lang" id="programming-lang" multiple>
+                  <option value="c">C</option>
+                  <option value="c++">C++</option>
+                  <option value="java">Java</option>
+                  <option value="javascript">Javascript</option>
+                  <option value="python">Python</option>
+                  <option value="go">Golang</option>
+                  <option value="rust">Rust</option>
+                  <option value="sql">SQL</option>
+                </select>
+              </div>
+
+              <div class="formbold-input-radio-wrapper">
+                <label for="ans" class="formbold-form-label">
+                  Would you recomend our site to a friend?
+                </label>
+
+                <div class="formbold-radio-flex">
+                  <div class="formbold-radio-group">
+                    <label class="formbold-radio-label">
+                      <input class="formbold-input-radio" type="radio" name="ans" id="ans" />
+                      Yes
+                      <span class="formbold-radio-checkmark"></span>
+                    </label>
+                  </div>
+
+                  <div class="formbold-radio-group">
+                    <label class="formbold-radio-label">
+                      <input class="formbold-input-radio" type="radio" name="ans" id="ans" />
+                      No
+                      <span class="formbold-radio-checkmark"></span>
+                    </label>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="formbold-input-radio-wrapper">
+                <label class="formbold-form-label">
+                  Would you like people or groups?
+                </label>
+
+                <div class="formbold-radio-flex">
+                  <div class="formbold-radio-group">
+                    <label class="formbold-radio-label">
+                      <input class="formbold-input-radio" type="radio" name="people-or-groups" id="people-or-groups" />
+                      People
+                      <span class="formbold-radio-checkmark"></span>
+                    </label>
+                  </div>
+
+                  <div class="formbold-radio-group">
+                    <label class="formbold-radio-label">
+                      <input class="formbold-input-radio" type="radio" name="people-or-groups" id="people-or-groups" />
+                      Groups
+                      <span class="formbold-radio-checkmark"></span>
+                    </label>
+                  </div>
+
+                  <div class="formbold-radio-group">
+                    <label class="formbold-radio-label">
+                      <input class="formbold-input-radio" type="radio" name="people-or-groups" id="people-or-groups" />
+                      All
+                      <span class="formbold-radio-checkmark"></span>
+                    </label>
+                  </div>
+
+                </div>
+              </div>
+
+              <div>
+                <label for="message" class="formbold-form-label">
+                  Any comments or suggestions
+                </label>
+                <textarea rows="6" name="message" id="message" placeholder="Type here..."
+                  class="formbold-form-input"></textarea>
+              </div>
+
+              <button class="formbold-btn">Submit</button>
+            </form>
+          </div>
+        </div>
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+
+          body {
+            font-family: 'Inter', sans-serif;
+          }
+
+          .formbold-main-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px;
+          }
+
+          .formbold-form-wrapper {
+            margin: 0 auto;
+            max-width: 570px;
+            width: 100%;
+            background: #a5d6d0;
+            padding: 40px;
+          }
+
+          .formbold-form-img {
+            margin-bottom: 45px;
+          }
+
+          .formbold-input-group {
+            margin-bottom: 18px;
+          }
+
+          .formbold-form-select {
+            width: 100%;
+            padding: 12px 22px;
+            border-radius: 5px;
+            border: 1px solid #dde3ec;
+            background: #ffffff;
+            font-size: 16px;
+            color: #536387;
+            outline: none;
+            resize: none;
+          }
+
+          .formbold-input-radio-wrapper {
+            margin-bottom: 25px;
+          }
+
+          .formbold-radio-flex {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+          }
+
+          .formbold-radio-label {
+            font-size: 14px;
+            line-height: 24px;
+            color: #07074d;
+            position: relative;
+            padding-left: 25px;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+          }
+
+          .formbold-input-radio {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+          }
+
+          .formbold-radio-checkmark {
+            position: absolute;
+            top: -1px;
+            left: 0;
+            height: 18px;
+            width: 18px;
+            background-color: #ffffff;
+            border: 1px solid #dde3ec;
+            border-radius: 50%;
+          }
+
+          .formbold-radio-label .formbold-input-radio:checked~.formbold-radio-checkmark {
+            background-color: #6a64f1;
+          }
+
+          .formbold-radio-checkmark:after {
+            content: '';
+            position: absolute;
+            display: none;
+          }
+
+          .formbold-radio-label .formbold-input-radio:checked~.formbold-radio-checkmark:after {
+            display: block;
+          }
+
+          .formbold-radio-label .formbold-radio-checkmark:after {
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ffffff;
+            transform: translate(-50%, -50%);
+          }
+
+          .formbold-form-input {
+            width: 100%;
+            padding: 13px 22px;
+            border-radius: 5px;
+            border: 1px solid #dde3ec;
+            background: #ffffff;
+            font-weight: 500;
+            font-size: 16px;
+            color: #07074d;
+            outline: none;
+            resize: none;
+          }
+
+          .formbold-form-input::placeholder {
+            color: #536387;
+          }
+
+          .formbold-form-input:focus {
+            border-color: #6a64f1;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+          }
+
+          .formbold-form-label {
+            color: #07074d;
+            font-size: 14px;
+            line-height: 24px;
+            display: block;
+            margin-bottom: 10px;
+          }
+
+          .formbold-btn {
+            text-align: center;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 5px;
+            padding: 14px 25px;
+            border: none;
+            font-weight: 500;
+            background-color: #6a64f1;
+            color: white;
+            cursor: pointer;
+            margin-top: 25px;
+          }
+
+          .formbold-btn:hover {
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+          }
+
+          .peocon {
+            padding: 30px; height: 200px; margin-bottom: 20px; background-color: #d0eeea; border-radius: 20px;
+            box-shadow: rgba(22, 69, 102, 0.493) 0px 5px 10px;
+          }
+
+          .peocon:hover {
+            background-color: #9ed3cd;
+            cursor: pointer;
+          }
+        </style>
+      </div>
+
+      <div id="result" >
+        <div class = "container" style="position: relative; height: fit-content; width: 80%;  left: 10%; top: 50px;">
+          <h2 style="margin-bottom: 20px;"> Suggestions </h2>
+          <div class = "peocon" id = "people-container" > 
+            <div id = "people-image">
+              <img src="https://i.ibb.co/HrzP4fz/ma.png" style="position: relative; height: 80%; top: 10%; left: 10%; "\>
+            </div>
+
+            <div id = people-info>
+              <a> Name person: aaa bbb ccc</a>
+              <a> Nation: Vietnam</a>
+              <a> Language: Vietnamese, English</a>
+              <a> Role: Back-end developer</a>
+              <a> Programming languaage: C++, Python, Java</a>
+              <a> Description: </a>
+            </div>
+          </div>
+
+          <div class = "peocon" id = "people-container" > 
+            <div id = "people-image">
+              <img src="https://i.ibb.co/HrzP4fz/ma.png" style="position: relative; height: 80%; top: 10%; left: 10%;"\>
+            </div>
+
+            <div id = people-info>
+              <a> Name person: aaa bbb ccc</a>
+              <a> Nation: Vietnam</a>
+              <a> Language: Vietnamese, English</a>
+              <a> Role: Back-end developer</a>
+              <a> Programming languaage: C++, Python, Java</a>
+              <a> Description: </a>
+            </div>
+          </div>
+
+          <div class = "peocon"  id = "people-container"> 
+            <div id = "people-image" >
+              <img src="https://i.ibb.co/HrzP4fz/ma.png" style="position: relative; height: 80%; top: 10%; left: 10%;"\>
+            </div>
+
+            <div id = people-info>
+              <a> Name person: aaa bbb ccc</a>
+              <a> Nation: Vietnam</a>
+              <a> Language: Vietnamese, English</a>
+              <a> Role: Back-end developer</a>
+              <a> Programming languaage: C++, Python, Java</a>
+              <a> Description: </a>
+            </div>
+          </div>
+          <style> 
+            #people-container {
+              height: 200px;
+              width: 100%;
+              display: flex;
+            }
+
+            
+
+            #people-image {
+              width: 20%;
+              height: 100%;
+            }
+            #people-info {
+              width: 80%;
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+            }
+          </style>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
