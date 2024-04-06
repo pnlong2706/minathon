@@ -1,1 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Info Page</title>
+    <script>
+        user_name = "hihiaass";
+
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2980b9;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #2ecc71;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        input[type="submit"]:hover {
+            background-color: #27ae60;
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #menu {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            position: relative;
+            padding-left: 40px;
+            height: fit-content;
+        }
+
+        #menu, #menu a {
+            display: fixed;
+            background-color: #003C43;
+            color: white;
+            font-size: 18px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #menu a {
+            display: inline-block;
+            height: 50px;
+            line-height: 50px;
+            padding-left: 30px; 
+            padding-right: 30px;
+            border-radius: 15px;
+        }
+
+        #menu a:hover {
+            cursor: pointer;
+            background-color: #E3FEF7;
+            color: #003C43;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #login_button {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div id = "menu">
+        <a> MATCHING  </a>
+        <a> CHAT BOX </a>
+        <a> MENTOR </a>
+        <a id = "login_button" > LOGIN </a>    
+    </div>
+
+    <div class="container">
+        <h1>User Info</h1>
+        <form action="#" method="post">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required>
+            
+            <label for="characteristics">Characteristics:</label>
+            <textarea id="characteristics" name="characteristics" rows="4"></textarea>
+            
+            <label for="hobbies">Hobbies:</label>
+            <textarea id="hobbies" name="hobbies" rows="4"></textarea>
+            
+            <label for="additional_info">Additional Information:</label>
+            <textarea id="additional_info" name="additional_info" rows="4"></textarea>
+            
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    <script>
+        // Check if user data exists in local storage
+        const userData = JSON.parse(localStorage.getItem('userData'));
+
+        // If user data exists, fill the form fields with the saved data
+        if (userData) {
+            document.getElementById('name').value = userData.name;
+            document.getElementById('email').value = userData.email;
+            document.getElementById('dob').value = userData.dob;
+            document.getElementById('characteristics').value = userData.characteristics;
+            document.getElementById('hobbies').value = userData.hobbies;
+            document.getElementById('additional_info').value = userData.additional_info;
+        }
+
+        // Add submit event listener to the form
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            // Prevent the form from submitting normally
+            event.preventDefault();
+
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                dob: document.getElementById('dob').value,
+                characteristics: document.getElementById('characteristics').value,
+                hobbies: document.getElementById('hobbies').value,
+                additional_info: document.getElementById('additional_info').value
+            };
+
+            // Save form data to local storage
+            localStorage.setItem('userData', JSON.stringify(formData));
+
+            // Optionally, you can redirect the user to another page after saving the data
+            // window.location.href = 'anotherpage.html';
+        });
+    </script>
+</body>
+</html>
 
