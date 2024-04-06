@@ -3,7 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title> Matching collaborator </title>
+    <script>
+
+        let current_user_id = "-1";
+
+        function show_login() {
+            document.getElementById("match_button_main").style.display = "none";        
+            document.getElementById("tit1").style.display = "none";  
+            document.getElementById("tit2").style.display = "none";  
+            document.getElementById("login_box").style.display = "flex";  
+            document.getElementById("login_box").style.justifyContent = "center";
+            document.getElementById("login_box").style.alignItems = "center";
+            document.getElementById("login_box").style.flexDirection = "column"
+        }
+
+        function exit_login_() {
+            document.getElementById("match_button_main").style.display = "block";        
+            document.getElementById("tit1").style.display = "block";  
+            document.getElementById("tit2").style.display = "block";  
+            document.getElementById("login_box").style.display = "none";  
+        }
+
+        function login() {
+            // request - reponse
+            // return state, user_info
+            // update user_info
+
+            let user_name = "Long";
+
+            let user = document.getElementById("user_id").value;
+            let password = document.getElementById("user_password").value;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/checkvalid", true);
+            xhr.onload = function() {
+                let res = xhr.responseText;
+                if( res != "-1") {
+                    location.assign("http://192.168.211.250:3000/user?id=" + user + "?hp=" + res )
+                    /*
+                    current_user_id = id;
+                    document.getElementById("login_button").innerHTML = current_user_id;
+                    document.getElementById("log_out").style.display = "inline-block";
+                    document.getElementById('login_button').onclick = function() { 
+                        location.assign("http://192.168.169.250:3000/user_info?id=" + res);
+                    };
+                    */
+                }
+                else {
+                    alert("WRONG USER ID OR PASSWORD!");
+                    document.getElementById("user_id").value = "";
+                    document.getElementById("user_password").value = "  ";
+                }
+            };
+
+            xhr.send( user + "=" + password );
+        }
+
+        function enter_send_valid(event) {
+            if(event.key == "Enter") login();
+        }
+
+        function log_out() {
+            current_user_id = "-1";
+            location.assign("http://192.168.211.250:3000/");
+        }
+
+        function go_chat_box() {
+            if(current_user_id == "-1") {
+                show_login();
+            }
+            else location.assign("http://192.168.211.250:3000/chatbox?id="+current_user_id);
+        }
+
+        function go_filter() {
+            if(current_user_id == "-1") {
+                show_login();
+            }
+            else location.assign("http://192.168.211.250:3000/filter?id="+current_user_id);
+        }
+
+        function go_mentor() {
+            if(current_user_id == "-1") {
+                show_login();
+            }
+            else location.assign("http://192.168.211.250:3000/mentor?id="+current_user_id);
+        }
+
+    </script>
     <style>
         * {
             margin: 0px;
@@ -11,15 +98,16 @@
         }
 
         #menu {
-            padding-top: 5px;
-            padding-bottom: 5px;
+            padding-top: 10px;
+            padding-bottom: 30px;
             position: relative;
             padding-left: 40px;
             height: fit-content;
         }
 
-        #menu, #menu a {
-            background-color: #003C43;
+        #menu {
+            /* background-color: #00292e; */
+            background-image: linear-gradient(#00292e, #00292e00);
             color: white;
             font-size: 18px;
             font-family: Arial, Helvetica, sans-serif;
@@ -32,6 +120,7 @@
             padding-left: 30px; 
             padding-right: 30px;
             border-radius: 15px;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         #menu a:hover {
@@ -45,9 +134,15 @@
             float: right;
         }
 
+        #menu #log_out {
+            float: right;
+            display: none;
+        }
+
         #container {
             width: 100%;
             display: flex;
+            position: relative;
             justify-content: center;
             flex-direction: column;
             align-items: center;
@@ -55,53 +150,146 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
+        @keyframes slidedown {
+            from {opacity: 0; top: 80px;}
+            to {opacity: 1; top: 0px}
+        }
+
         .title {
             color: #ffffff ;
             font-size: 80px;
             font-weight: bolder;
+            animation: slidedown 1.5s;
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
         }
 
         #match_button_main {
-            color: #003C43;
+            color: #ffffff;
             font-size: 40px;
-            background-color: #E3FEF7;
+            background-color: #003c43;
             padding: 20px 20px 20px 20px;
             border-radius: 20px;
             width: max(100px,15vw);
             text-align: center;
             margin-top: 20px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            animation: slidedown 1.5s;
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
         }
 
         #match_button_main:hover {
-            background-color: #135D66;
+            background-color: #2e5f5f56;
             transition: background-color 0.3s;
             cursor: pointer;
         }
 
         body {
-            background-image: url("img/back_main3.jpg");
+            background-image: url("https://i.ibb.co/f0DGXsk/back-main3.jpg");
             background-repeat: no-repeat;
             background-size: 100vw 130vh;
-        }        
+        }
+
+        
+        #login_box {
+            display: none;
+            position: absolute;
+            border-radius: 30px;
+            height: 80vh;
+            width: 30vw;
+            background-image: linear-gradient(#E3FEF7, #e3fef75d);
+            animation: slidedown 0.5s;
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
+        }
+
+        #login_box p {
+            color: #003c43;
+            font-size: 80px;
+            font-weight: bold;
+            margin-bottom: 100px;
+        }
+
+        #login_box input {
+            height: 40px;
+            width: 60%;
+            font-size: 20px;
+            background-color: #E3FEF7;
+            border: none;
+            padding: 10px 10px 10px 10px;
+            margin-top: 10px;
+            border-radius: 10px;
+        }
+
+        #login_box button {
+            font-size: 24px;
+            height: fit-content;
+            width: 62%;
+            background-color: #E3FEF7;
+            border: none;
+            padding: 10px 10px 10px 10px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            margin-top: 40px;
+            border-radius: 10px;
+        }
+
+        #login_box button:hover {
+            background-color:#e3fef75d;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        #exit_login {
+            width: 50px;
+            height: 50px;
+            align-items: center;
+            line-height: 50px;
+            text-align: center;
+            border-radius: 50px;
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 20px;
+            font-weight: 100;
+        }
+
+        #exit_login:hover {
+            background-color: #00292e;
+            color: #E3FEF7;
+            transition: background-color 0.3s, color 0.3s;
+            cursor: pointer;
+        }
+
         
     </style>
 </head>
 <body>
-    
     <div id = "menu">
-        <a> MATCHING  </a>
-        <a> CHAT BOX </a>
-        <a> MENTOR </a>
-        <a id = "login_button" > LOGIN </a>    
+        <a> HOME </a>
+        <a onclick = "go_filter()" > MATCHING  </a>
+        <a onclick="go_chat_box()" > CHAT BOX </a>
+        <a onclick="go_mentor()" > MENTOR </a>
+        <a id = "login_button" onclick = "show_login()" > LOGIN </a>
+        <a id = "log_out" onclick="log_out()" > LOG OUT </a>
     </div>
-    
-    <div id = "container">
-        <div class = "title" > MATCHING </div>
-        <div class = "title" > COLLABRATOR </div>
-        <div id = "match_button_main"> 
+    <div id = "container"> 
+        <div class = "title" id = "tit1" > MATCHING </div>
+        <div class = "title" id = "tit2" > COLLABRATOR </div>
+        <div id = "match_button_main" onclick = "go_filter()"> 
             MATCH!
+        </div> 
+        <div id = "login_box" > 
+            <div id = "exit_login" onclick = "exit_login_()" > X </div>
+            <p> LOGIN </p>
+            <input type="text" placeholder="Enter user id" id="user_id" name="name"> 
+            <input type="password" placeholder="Password" id="user_password" name="name" onkeydown="enter_send_valid(event)">
+            <button onclick="login()" > SUBMIT </button>
         </div>
     </div>
+
 </body>
 </html>
 
