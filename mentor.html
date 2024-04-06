@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentor Suggestions</title>
+<script>
+    let current_user_id = "";
+    let current_hp = "";
+
+    function back_home() {
+        location.assign("http://192.168.211.250:3000/user?id="+current_user_id+"?hp="+current_hp);
+    }
+
+    function go_filter() {
+        location.assign("http://192.168.211.250:3000/filter?id="+current_user_id);
+    }
+
+    function go_chat_box() {
+        if(current_user_id == "-1") {
+            show_login();
+        }
+        else location.assign("http://192.168.211.250:3000/chatbox?id="+current_user_id);
+    }
+
+    function keydown(e) {
+        if(e.key == "ArrowLeft" ) scrollPeople(-1);
+        if(e.key == "ArrowRight" ) scrollPeople(1);
+    }
+
+</script>
+<style>
+    /* Basic styling for demonstration */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+    }
+    * {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #menu {
+        padding-top: 10px;
+        padding-bottom: 5px;
+        position: relative;
+        padding-left: 40px;
+        height: fit-content;
+    }
+
+    #menu, #menu a {
+        background-color: #003C43;
+        color: white;
+        font-size: 18px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #menu a {
+        display: inline-block;
+        height: 50px;
+        line-height: 50px;
+        padding-left: 30px; 
+        padding-right: 30px;
+        border-radius: 15px;
+    }
+
+    #menu a:hover {
+        cursor: pointer;
+        background-color: #E3FEF7;
+        color: #003C43;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    #login_button {
+        float: right;
+    }
+
+    .title {
+        color: #ffffff ;
+        font-size: 80px;
+        font-weight: bolder;
+    }
+    #container {
+        width: 60vw; /* Set the desired width */
+        margin: 0 auto; /* Center the container */
+        overflow: hidden; /* Hide the scroll bar */
+        position: relative; /* For absolute positioning of buttons */
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        padding-left: 80px;
+        padding-right: 80px;
+        height: 60vh;
+    }
+    #peopleContainer {
+        height: fit-content;
+        display: flex;
+        overflow-x: hidden;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch; /* Enables smooth scrolling on iOS devices */
+    }
+    .personBox {
+        border: 0px solid #ccc;
+        border-radius: 20px;
+        width: 300px; /* Adjust as needed */
+        height: 45vh;
+        margin-right: 20px;
+        margin-top: 40px;
+        background-color: #d4f0f1;
+        padding: 20px;
+        box-shadow: rgba(22, 69, 102, 0.493) 0px 3px 7px;
+        margin-bottom: 10px;
+    }
+
+    .personBox button {
+        margin: 10px;
+        width: 100px;
+        height: 40px;
+        font-size: 14px;
+    }
+
+    .person img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+    }
+    .personDetails {
+        width: 90%;
+        margin-bottom: 10px;
+    }
+    .personDetails h2 {
+        margin: 10px;
+        color: #333;
+    }
+    .personDetails p 
+    {
+        width: 90%; word-break: break-all; white-space: normal;
+        margin: 10px;
+
+
+        color: #313131;
+    }
+    #scrollLeftButton, #scrollRightButton {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 10px;
+        background-color: #ccc;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 15px;
+    }
+    #scrollLeftButton:hover, #scrollRightButton:hover {
+        background-color: #aaa;
+    }
+    #scrollLeftButton {
+        left: 10px;
+    }
+    #scrollRightButton {
+        right: 10px;
+    }
+</style>
+</head>
+<body onkeydown="keydown(event)" >
+
+<div id="menu">
+    <a onclick="back_home()" > HOME </a>
+    <a onclick="go_filter()" >MATCHING</a>
+    <a onclick="go_chat_box()" >CHAT BOX</a>
+    <a >MENTOR</a>
+
+</div>
+
+<h1 style="text-align: center; margin: 40px; "> Mentor Suggestions</h1>
+
+
+<div id="container">
+    <div id="scrollLeftButton" onclick="scrollPeople(-1)">&lt;</div>
+    <div id="peopleContainer">
+        <!-- Add more people suggestions here -->
+        <div class="person">
+            <div class="personBox">
+                <img src="https://i.ibb.co/HrzP4fz/ma.png" alt="Profile Picture">
+                <div class="personDetails">
+                    <h2>John Doe</h2>
+                    <p>Software Developer</p>
+                    <p >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec convallis leo. Vestibulum sodales viverra odio sit amet consequat.</p>
+                </div>
+                <button onclick="showProfile('John Doe', 'profile1.jpg')">View Profile</button>
+            </div>
+        </div>
+
+        <!-- Person 2 -->
+        <div class="person">
+            <div class="personBox">
+                <img src="https://i.ibb.co/HrzP4fz/ma.png" alt="Profile Picture">
+                <div class="personDetails">
+                    <h2>Jane Smith</h2>
+                    <p>Graphic Designer</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec convallis leo. Vestibulum sodales viverra odio sit amet consequat.</p>
+                </div>
+                <button onclick="showProfile('Jane Smith', 'profile2.jpg')">View Profile</button>
+            </div>
+        </div>
+
+        <!-- Person 3 -->
+        <div class="person">
+            <div class="personBox">
+                <img src="https://i.ibb.co/HrzP4fz/ma.png" alt="Profile Picture">
+                <div class="personDetails">
+                    <h2>Michael Johnson</h2>
+                    <p>Marketing Manager</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec convallis leo. Vestibulum sodales viverra odio sit amet consequat.</p>
+                </div>
+                <button onclick="showProfile('Michael Johnson', 'profile3.jpg')">View Profile</button>
+            </div>
+        </div>
+
+        <!-- Person 4 -->
+        <div class="person">
+            <div class="personBox">
+                <img src="https://i.ibb.co/HrzP4fz/ma.png" alt="Profile Picture">
+                <div class="personDetails">
+                    <h2>Sarah Brown</h2>
+                    <p>UX Designer</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec convallis leo. Vestibulum sodales viverra odio sit amet consequat.</p>
+                </div>
+                <button onclick="showProfile('Sarah Brown', 'profile4.jpg')">View Profile</button>
+            </div>
+        </div>
+
+        <!-- Person 5 -->
+        <div class="person">
+            <div class="personBox">
+                <img src="https://i.ibb.co/HrzP4fz/ma.png" alt="Profile Picture">
+                <div class="personDetails">
+                    <h2>David Lee</h2>
+                    <p>Project Manager</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec convallis leo. Vestibulum sodales viverra odio sit amet consequat.</p>
+                </div>
+                <button onclick="showProfile('David Lee', 'profile5.jpg')">View Profile</button>
+            </div>
+        </div>
+
+        <!-- Person 6 -->
+        <div class="person">
+            <div class="personBox">
+                <img src="https://i.ibb.co/HrzP4fz/ma.png" alt="Profile Picture">
+                <div class="personDetails">
+                    <h2>Emily Davis</h2>
+                    <p>Content Writer</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec convallis leo. Vestibulum sodales viverra odio sit amet consequat.</p>
+                </div>
+                <button onclick="showProfile('Emily Davis', 'profile6.jpg')">View Profile</button>
+            </div>
+        </div>
+    </div>
+    <div id="scrollRightButton" onclick="scrollPeople(1)">&gt;</div>
+</div>
+
+<!-- Modal for showing profiles -->
+<div id="profileModal" style="display: none;">
+    <h2 id="profileName"></h2>
+    <img id="profileImage" src="" alt="Profile Picture">
+</div>
+
+<script>
+    let container = document.getElementById('peopleContainer');
+
+    function scrollPeople(direction) {
+        let scrollAmount = direction * 355; // Adjust as needed
+        container.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+
+    // Function to show profile modal
+    function showProfile(name, image) {
+        /* document.getElementById('profileName').textContent = name;
+        document.getElementById('profileImage').src = image;
+        document.getElementById('profileModal').style.display = 'block'; */
+    }
+</script>
+
+</body>
+</html>
