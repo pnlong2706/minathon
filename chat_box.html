@@ -75,9 +75,18 @@
         }
         else location.assign("http://192.168.211.250:3000/mentor?id="+current_user_id);
     }
+
+    function go_chat_bot() {
+        if(current_user_id == "-1") {
+            show_login();
+        }
+        else location.assign("http://192.168.211.250:3000/chatbot?id="+current_user_id);
+    }
+
 </script>
 <body>
     <!-- <main class="w-auto p-3 content"> -->
+        
         <div class="container-fluid p-0">
             <div id="menu">
                 <a onclick="back_home()" > HOME </a>
@@ -138,6 +147,17 @@
                                     <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Vanessa Tucker" width="40" height="40">
                                     <div class="flex-grow-1 ml-3">
                                         Vanessa Tucker
+                                        <div class="small"><span class="chat-online"></span>Latest mess 1</div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <a href="#" class="list-group-item list-group-item-action border-0 rounded-lg" >
+                                <!-- <div class="badge bg-success float-right">5</div> -->
+                                <div class="d-flex align-items-start" onclick="go_chat_bot()">
+                                    <img src="https://engage.sinch.com/sites/default/files/styles/small_hq/public/image/2023-04/Hero%20Illustration%20-%20Chatbots%20-%20SE%20-%20Website%20-%201000x850%20-%2001.png?itok=Me3rdWtS" class="rounded-circle mr-1" alt="Vanessa Tucker" width="40" height="40">
+                                    <div class="flex-grow-1 ml-3">
+                                        Chatbot
                                         <div class="small"><span class="chat-online"></span>Latest mess 1</div>
                                     </div>
                                 </div>
