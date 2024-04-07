@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Sample mentor data (replace with your actual data)
+# Mentor data with name, email, and birthday
 mentors_data = [
     {"name": "John Doe", "email": "john@example.com", "birthday": "1990-01-01",
      "characteristics": "Experienced, patient, friendly", "hobbies": "Reading, hiking",
@@ -37,7 +37,6 @@ mentors_data = [
     # Add more mentors data as needed
 ]
 
-
 # Convert mentor data into DataFrame
 mentors_df = pd.DataFrame(mentors_data)
 
@@ -53,12 +52,29 @@ tfidf_matrix = tfidf_vectorizer.fit_transform(mentors_df['features'])
 # Compute cosine similarity
 cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
-def recommend_mentors(name):
+def recommend_mentors(name, location=None, hobbies=None, language=None, programming_language=None, job=None):
     # Find index of the mentor with given name
     mentor_index = mentors_df[mentors_df['name'] == name].index[0]
     
+    # Filter mentors based on user-specified criteria
+    filtered_mentors_df = mentors_df.copy()
+    if location:
+        filtered_mentors_df = filtered_mentors_df[filtered_mentors_df['location'] == location]
+    if hobbies:
+        filtered_mentors_df = filtered_mentors_df[filtered_mentors_df['hobbies'].str.contains(hobbies, case=False)]
+    if language:
+        filtered_mentors_df = filtered_mentors_df[filtered_mentors_df['language'] == language]
+    if programming_language:
+        filtered_mentors_df = filtered_mentors_df[filtered_mentors_df['programming_language'] == programming_language]
+    if job:
+        filtered_mentors_df = filtered_mentors_df[filtered_mentors_df['job'] == job]
+    
+    # Compute similarity scores for filtered mentors
+    tfidf_matrix_filtered = tfidf_vectorizer.transform(filtered_mentors_df['features'])
+    mentor_similarities = cosine_similarity(tfidf_matrix_filtered, tfidf_matrix_filtered)
+    
     # Get similarity scores for the mentor
-    mentor_sim_scores = list(enumerate(cosine_sim[mentor_index]))
+    mentor_sim_scores = list(enumerate(mentor_similarities[mentor_index]))
     
     # Sort mentors by similarity scores
     mentor_sim_scores = sorted(mentor_sim_scores, key=lambda x: x[1], reverse=True)
@@ -70,11 +86,12 @@ def recommend_mentors(name):
     top_mentors_indices = [i[0] for i in mentor_sim_scores[:3]]
     
     # Return recommended mentors
-    recommended_mentors = mentors_df.iloc[top_mentors_indices]['name']
+    recommended_mentors = filtered_mentors_df.iloc[top_mentors_indices]['name']
     return recommended_mentors.tolist()
 
 # Example usage:
 # Replace 'John Doe' with the name of the mentor you want to find recommendations for
-recommended_mentors = recommend_mentors('John Doe')
+# You can also provide additional filter parameters such as location, hobbies, language, programming language, and job
+recommended_mentors = recommend_mentors('John Doe', location='New York', programming_language='Python')
 print("Recommended mentors for John Doe:")
 print(recommended_mentors)
