@@ -125,6 +125,14 @@ const server = http.createServer((req, res) => {
         });
     }
 
+    else if( url_.pathname === "/chatbot" ) {
+        let id = url_.search.split("=")[1];
+        fs.readFile("chat_bot.html", (err, data) => {
+            if (err) throw err;
+            res.end(data + "<script> current_user_id = '"+ id +"'; current_hp = '"+ hash(users[id]) +"';  </script>" );
+        });
+    }
+
     else if( req.url === "/changeInf" && req.method == "POST" ) {
         let body = ""
         req.on("data", function (chunk) {
