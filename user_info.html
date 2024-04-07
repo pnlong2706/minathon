@@ -12,12 +12,41 @@
         let user_char = "";
         let user_hobb = "";
         let user_addinf = "";
+        let user_loc = "";
+        let user_lang = "";
+        let user_plang = "";
+        let user_job = "";
 
         let current_user_id = "";
         let current_hp = "";
 
         function change() {
-            document.getElementById("dob").value = "2004-06-05"
+            user_name = document.getElementById("name").value;
+            user_mail = document.getElementById("email").value;
+            user_dob = document.getElementById("dob").value;
+            user_char = document.getElementById("characteristics").value;
+            user_hobb = document.getElementById("hobbies").value;
+            user_addinf = document.getElementById("additional_info").value;
+            user_loc = document.getElementById("loc").value;
+            user_lang = document.getElementById("lang").value;
+            user_plang = document.getElementById("p_lang").value;
+            user_job = document.getElementById("job").value;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/changeInf", true);
+            xhr.onload = function() {
+                let res = xhr.responseText;
+                if( res != "-1") {
+                    alert("Change infomation successfully");
+                }
+                else {
+                    alert("Something wrong!");
+                }
+            };
+
+            xhr.send( current_user_id + "=" + user_name  + "=" + user_mail  + "=" + user_dob  + "=" + user_char  + "=" + user_hobb  + "=" + user_addinf  + "=" + user_loc
+            + "=" + user_lang  + "=" + user_plang  + "=" + user_job );
+
         }
 
         function back_home() {
@@ -149,17 +178,31 @@
             
             <label for="dob">Date of Birth:</label>
             <input type="date" id="dob" name="dob" required>
+
+            <label for="hobbies">Location</label>
+            <textarea id="loc" name="loc" rows="1"></textarea>
+
+            <label for="hobbies">Language</label>
+            <textarea id="lang" name="lang" rows="1"></textarea>
+
+            <label for="hobbies">Programming language</label>
+            <textarea id="p_lang" name="p_lang" rows="1"></textarea>
+
+            <label for="hobbies">Your job</label>
+            <textarea id="job" name="job" rows="1"></textarea>
             
             <label for="characteristics">Characteristics:</label>
             <textarea id="characteristics" name="characteristics" rows="4"></textarea>
             
             <label for="hobbies">Hobbies:</label>
             <textarea id="hobbies" name="hobbies" rows="4"></textarea>
-            
+
             <label for="additional_info">Additional Information:</label>
             <textarea id="additional_info" name="additional_info" rows="4"></textarea>
             
             <input type="submit" value="change" onclick="change()">
+
+
         </form>
     </div>
 </body>
