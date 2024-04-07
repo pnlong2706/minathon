@@ -61,10 +61,17 @@ const server = http.createServer((req, res) => {
         let inf = info[id];
         fs.readFile("user_info.html", (err, data) => {
             if (err) throw err;
-            data = data + "<script> user_name = '" + inf["name"] +  "';  user_mail = '"+ inf["email"] +"'; user_dob = '"+ inf["birthday"] +"'; user_char = '"+ inf["characteristic"] +"'; user_hobb = '"+ inf["hobbies"] +"'; user_addinf = '"+ inf["addInf"] +"';" ;
-            data = data +  "document.getElementById('name').value = user_name; document.getElementById('email').value = user_mail; document.getElementById('dob').value = user_dob;";
-            data = data +  "document.getElementById('characteristics').value = user_char; document.getElementById('hobbies').value = user_hobb; document.getElementById('additional_info').value = user_addinf;";
-            data = data +  "current_user_id = '"+ id +"'; current_hp = '"+ hash(users[id]) +"';  </script>";
+            data = data + "<script> user_name = '" + inf["name"] +  "';  user_mail = '"+ inf["email"] +"'; user_dob = '"+ inf["birthday"] +"'; user_char = '"+ inf["characteristic"] +"'; user_hobb = '"+ inf["hobbies"] +"'; user_addinf = '"+ inf["addInf"]  ;
+            data = data + "'; user_loc = '" + inf["loc"];
+            data = data + "'; user_lang = '" + inf["lang"];
+            data = data + "'; user_plang = '" + inf["p_lang"];
+            data = data + "'; user_job = '" + inf["job"] + "';";
+
+            data = data + "document.getElementById('loc').value = user_loc; document.getElementById('lang').value = user_lang;";
+            data = data + "document.getElementById('p_lang').value = user_plang; document.getElementById('job').value = user_job;";
+            data = data + "document.getElementById('name').value = user_name; document.getElementById('email').value = user_mail; document.getElementById('dob').value = user_dob;";
+            data = data + "document.getElementById('characteristics').value = user_char; document.getElementById('hobbies').value = user_hobb; document.getElementById('additional_info').value = user_addinf;";
+            data = data + "current_user_id = '"+ id +"'; current_hp = '"+ hash(users[id]) +"';  </script>";
             res.end(data);
         });
     }
@@ -115,6 +122,107 @@ const server = http.createServer((req, res) => {
         fs.readFile("mentor.html", (err, data) => {
             if (err) throw err;
             res.end(data + "<script> current_user_id = '"+ id +"'; current_hp = '"+ hash(users[id]) +"';  </script>" );
+        });
+    }
+
+    else if( req.url === "/changeInf" && req.method == "POST" ) {
+        let body = ""
+        req.on("data", function (chunk) {
+            body += chunk ;
+            console.log(body);
+        });
+        req.on("end", function () {
+            let hold = body.split("=");
+            console.log(hold);
+            let id = hold[0];
+            let user_name = hold[1];
+            let user_mail = hold[2];
+            let user_dob = hold[3];
+            let user_char = hold[4];
+            let user_hobb = hold[5];
+            let user_addinf = hold[6];
+            let user_loc = hold[7];
+            let user_lang = hold[8];
+            let user_plang = hold[9];
+            let user_job = hold[10];
+            
+            info[id]["name"] = user_name;
+            info[id]["email"] = user_mail;
+            info[id]["birthday"] = user_dob;
+            info[id]["characteristic"] = user_char;
+            info[id]["hobbies"] = user_hobb;
+            info[id]["addInf"] = user_addinf;
+            info[id]["loc"] = user_loc;
+            info[id]["lang"] = user_lang;
+            info[id]["p_lang"] = user_plang;
+            info[id]["job"] = user_job;
+
+            const FileSystem = require("fs");
+            FileSystem.writeFile('infomation.JSON', JSON.stringify(info), (error) => {
+                if (error) throw error;
+            });
+        
+            res.end("1");
+        });
+    }
+
+    else if( req.url === "/searchhhh" && req.method == "POST" ) {
+        let body = "";
+        req.on("data", function (chunk) {
+            body += chunk ;
+            console.log(body);
+        });
+        req.on("end", function () {
+            let hold = body.split("=");
+            let loc = hold[0];
+            let lang = hold[1];
+            let char = hold[2];
+            let role = hold[3];
+            let plang = hold[4];
+            let id = hold[5];
+
+            // FINDING
+
+            let d = [] ;
+
+            const { spawn } = require('child_process');
+            const pyProg = spawn('py', ['D:/Codespaces/minathon/suggestion.py',loc,lang,plang,role,info[id]["name"]]);
+
+            pyProg.stdout.on('data', function(data) {
+                let s = data.toString();
+                s=s.replace('[','');
+                s=s.replace(']','');
+                s=s.replace("\r",'');
+                s=s.replace("\n",'');
+                s=s.replaceAll("'",'');
+                d = s.split(",");
+                console.log(d);
+
+                let rec = [];
+                for(let k=0; k<d.length; k++) {
+                    for(let i=0; i<100; i++) {
+                        if(d[k][0]==' ') d[k] = d[k].replace(' ', '');
+                        if( info["username"+i]["name"] == d[k] ) {
+                            rec.push("username"+i);
+                        }
+                    }
+                }
+
+                console.log(rec);
+
+                data = "" ;
+                for (let id of rec) {
+                    //console.log(info[id]);
+                    data += JSON.stringify(info[id]) + "=";
+                }
+
+                res.end(data);
+
+            });
+
+            // ***
+            //recommend = ["username1", "username99", "username98"];
+            
         });
     }
 
